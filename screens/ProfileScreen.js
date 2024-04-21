@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { View, Text, Button, Image, Pressable } from 'react-native';
 
 const ProfileScreen = ({ route }) => {
-  const { username } = route.params;
+  //const { username } = route.params;
+  username = "TEST";
   const [imageUri, setImageUri] = useState(null);
   const [audioUri, setAudioUri] = useState(null);
 
