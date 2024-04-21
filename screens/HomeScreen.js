@@ -1,6 +1,7 @@
 // screens/HomeScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
+import SignUpScreen from './SignUpScreen';
 
 const HomeScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -43,7 +44,7 @@ const HomeScreen = ({ navigation }) => {
 
       <Pressable
         style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5, marginTop: 10 }}
-        onPress={handleLogin}
+        onPress={SignUpScreen}
       > 
       <Text style={{ color: 'white' }}>Inscrivez-vous!</Text>
       </Pressable>
