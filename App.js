@@ -7,18 +7,42 @@ import HomeScreen from './screens/HomeScreen.js';
 import ProfileScreen from './screens/ProfileScreen.js';
 import CameraScreen from './screens/CameraScreen.js';
 import AudioScreen from './screens/AudioScreen.js';
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+
 
 const Tab = createBottomTabNavigator();
+
 
 export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
         <Tab.Navigator>
-          <Tab.Screen name="Accueil" component={HomeScreen} />
-          <Tab.Screen name="Profil" component={ProfileScreen} />
-          <Tab.Screen name="Caméra" component={CameraScreen} />
-          <Tab.Screen name="Audio" component={AudioScreen} />
+          <Tab.Screen name="Accueil" component={HomeScreen}
+            options={{
+              tabBarIcon: ({ focused }) => <Ionicons name="home" size={24}
+                color={focused ? "red" : "blue"} />
+            }} />
+             <Tab.Screen name="Profile" component={ProfileScreen}
+            options={{
+              tabBarIcon: ({ focused }) =><MaterialIcons name="account-box" size={24}
+                color={focused ? "red" : "blue"} />
+            }} />
+          <Tab.Screen name="Caméra" component={CameraScreen} 
+            options={{
+              tabBarIcon: ({ focused }) =><AntDesign name="camera" size={24}
+                color={focused ? "red" : "blue"} />
+            }} 
+          />
+          <Tab.Screen name="Audio" component={AudioScreen} 
+           options={{
+            tabBarIcon: ({ focused }) =><FontAwesome5 name="microphone" size={24} 
+              color={focused ? "red" : "blue"} />
+          }} 
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </PaperProvider>
