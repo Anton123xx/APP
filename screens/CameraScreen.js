@@ -1,50 +1,3 @@
-// App.js
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Provider as PaperProvider } from 'react-native-paper';
-import HomeScreen from './screens/HomeScreen.js';
-import ProfileScreen from './screens/ProfileScreen.js';
-import CameraScreen from './screens/CameraScreen.js';
-import AudioScreen from './screens/AudioScreen.js';
-
-const Tab = createBottomTabNavigator();
-
-export default function App() {
-  return (
-    <PaperProvider>
-      <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name="Accueil" component={HomeScreen} />
-          <Tab.Screen name="Profil" component={ProfileScreen} />
-          <Tab.Screen name="Caméra" component={CameraScreen} />
-          <Tab.Screen name="Audio" component={AudioScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
-  );
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
 import { Camera, CameraType } from 'expo-camera';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -110,4 +63,3 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
-*/
