@@ -38,7 +38,18 @@ const HomeScreen = ({ navigation }) => {
       >
         <Text style={{ color: 'white' }}>Se connecter</Text>
       </Pressable>
+
+      <Text style={{ marginTop: 20 }}>Pas encore de compte ?</Text>
+
+      <Pressable
+        style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5, marginTop: 10 }}
+        onPress={handleLogin}
+      > 
+      <Text style={{ color: 'white' }}>Inscrivez-vous!</Text>
+      </Pressable>
     </View>
+
+      
   );
 }
 
