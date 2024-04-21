@@ -2,6 +2,10 @@ import { Camera, CameraType } from 'expo-camera';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+
+//https://docs.expo.dev/versions/latest/sdk/camera/
+//faut implementer zoom et auto focus
+
 export default function App() {
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
