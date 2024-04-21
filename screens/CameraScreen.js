@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, {useRef } from 'react';
 
-
 //https://docs.expo.dev/versions/latest/sdk/camera/
 //faut implementer zoom et auto focus
 
@@ -80,7 +79,7 @@ export default function App() {
           <Button title="Zoom +" onPress={handleZoomIn} />
           <Button title="Zoom -" onPress={handleZoomOut} />
           <Button title="Auto Focus" onPress={toggleAutoFocus} />
-          <Button title="Flip" onPress={toggleCameraType} />
+          <Button title="Flip" onPress={toggleCameraType}></Button> 
         </View>
         <View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: 20 }}>
           <Button title="Prendre une photo" onPress={takePicture} />
