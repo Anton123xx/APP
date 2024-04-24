@@ -1,12 +1,57 @@
 // screens/ProfileScreen.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Button, Image, Pressable } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ProfileScreen = ({ route }) => {
-  //const { username } = route.params;
-  username = "TEST";
+const ProfileScreen = () => {
+  const [username, setUsername ] = useState(null);
   const [imageUri, setImageUri] = useState(null);
   const [audioUri, setAudioUri] = useState(null);
+
+  useEffect(() => {
+    const onLoad = async () => {
+      var tempUri = await getValue("ImageUri");
+      var user = await getValue('Username');
+      setUsername(user);
+      
+      if(tempUri === null){
+        var imagePath = require('./defaultProfileImg.jpg');
+        var imgUri = Image.resolveAssetSource(imagePath).uri
+        setImageUri(imgUri);
+        await setUserData("ImageUri", imageUri);
+      }
+
+      setImageUri(tempUri);
+    }
+    onLoad();
+  }, []);
+
+  const getValue = async (key) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if(value !== null){
+        console.log('Username: ', value)
+        return value;
+      }
+      else{
+        console.log('No username. Displaying sign up screen.')
+        return null;
+      }
+    }
+    catch{
+      console.error('Error retrieving username: ', error);
+      return null;
+    }
+  }
+
+  const setUserData = async (key, value) => {
+    try{
+      await AsyncStorage.setItem(key, value);
+    }
+    catch(error){
+      console.error('Error storing data: ', error);
+    }
+  }
 
   const handlePlayAudio = () => {
     // Code pour jouer l'audio enregistré
@@ -17,13 +62,7 @@ const ProfileScreen = ({ route }) => {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Profil</Text>
       <Text>Nom: {username}</Text>
-      {imageUri && <Image source={{ uri: imageUri }} style={{ width: 200, height: 200, marginVertical: 10 }} />}
-      <Button title="Prendre une photo" onPress={() => {
-        // Code pour prendre une photo et mettre à jour l'URI de l'image
-        console.log('Prendre une photo');
-        // Supposons que setImageUri mette à jour l'URI de l'image après avoir pris la photo
-        setImageUri('https://example.com/image.jpg'); // Remplacer par l'URI réelle de l'image prise
-      }} />
+      <Image source={{ uri: imageUri}} style={{ width: 200, height: 200, marginVertical: 10 }} />
       {audioUri && (
         <View style={{ marginVertical: 10 }}>
           <Text>Audio enregistré: {audioUri}</Text>
@@ -35,12 +74,6 @@ const ProfileScreen = ({ route }) => {
           </Pressable>
         </View>
       )}
-      <Button title="Enregistrer un audio" onPress={() => {
-        // Code pour enregistrer un audio et mettre à jour l'URI de l'audio
-        console.log('Enregistrer un audio');
-        // Supposons que setAudioUri mette à jour l'URI de l'audio après l'enregistrement
-        setAudioUri('https://example.com/audio.mp3'); // Remplacer par l'URI réelle de l'audio enregistré
-      }} />
     </View>
   );
 }

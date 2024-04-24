@@ -1,5 +1,5 @@
 // App.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -11,12 +11,35 @@ import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Tab = createBottomTabNavigator();
 
+ const getUsername = async () => {
+    try {
+      const value = await AsyncStorage.getItem('Username');
+      if(value !== null){
+        console.log('Username: ', value)
+        return value;
+      }
+      else{
+        console.log('No username. Displaying sign up screen.')
+        return null;
+      }
+    }
+    catch{
+      console.error('Error retrieving username: ', error);
+      return null;
+    }
+  }
 
 export default function App() {
+
+  useEffect(async () => {
+    await getUsername();
+  }, []);
+  
   return (
     <PaperProvider>
       <NavigationContainer>
