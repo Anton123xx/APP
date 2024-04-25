@@ -26,10 +26,9 @@ const ProfileScreen = ({username, imageUri, audioUri}) => {
       <Text>{username}</Text>
       <Text>Nom: {username}</Text>
         <View style={{ marginVertical: 10 }}>
-          <Text>Audio enregistré: {audioUri}</Text>
-          <TouchableOpacity style={styles.button} onPress={playAudio} title="Jouer l'audio">
-          <Text style={{ color: 'white' }}>Lire l'audio</Text>
-          </TouchableOpacity>
+          {
+            audioUri !== undefined && <Button style={styles.button} title="Jouer l'audio" onPress={playAudio} />
+          }
         </View>
       
     </View>

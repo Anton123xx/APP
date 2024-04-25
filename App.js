@@ -20,11 +20,11 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [audioUri, setAudioUri] = useState(null);
-  const [imageUri, setImageUri] = useState(null);
+  const [imageUri, setImageUri] = useState('./screens/defaultProfileImg.jpg');
   const [username, setUsername] = useState('swag');
   const [password, setPassword] = useState('swag');
   
-  
+
   return (
     <PaperProvider>
       <NavigationContainer>
@@ -39,7 +39,7 @@ export default function App() {
               tabBarIcon: ({ focused }) => <MaterialIcons name="account-box" size={24}
                 color={focused ? "red" : "blue"} />
             }} />
-          <Tab.Screen name="Caméra" component={() => <CameraScreen uri={imageUri} setImageUri={setImageUri} />}
+          <Tab.Screen name="Caméra" component={() => <CameraScreen imageUri={imageUri} setImageUri={setImageUri} />}
             options={{
               tabBarIcon: ({ focused }) => <AntDesign name="camera" size={24}
                 color={focused ? "red" : "blue"} />
@@ -47,7 +47,7 @@ export default function App() {
           />
           <Tab.Screen
             name="Audio"
-            component={() => <AudioScreen uri={audioUri} setAudioUri={setAudioUri} />}
+            component={() => <AudioScreen audioUri={audioUri} setAudioUri={setAudioUri} />}
             options={{
               tabBarIcon: ({ focused }) => <FontAwesome5 name="microphone" size={24}
                 color={focused ? "red" : "blue"} />

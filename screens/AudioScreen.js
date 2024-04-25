@@ -39,6 +39,8 @@ const AudioScreen = ({audioUri, setAudioUri}) => {
       await recording.stopAndUnloadAsync();
       const uri = recording.getURI();
       setAudioUri(uri);
+      console.log('Recording stopped and stored at', uri);
+      console.log('Recording stopped and stored at', audioUri);
       setRecording(null);
     } catch (error) {
       console.error('Failed to stop recording', error);
