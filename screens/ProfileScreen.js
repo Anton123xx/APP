@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text,StyleSheet, Button, Image, Pressable, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Audio } from 'expo-av';
 
 const ProfileScreen = ({username, imageUri, audioUri}) => {
   //const [username, setUsername ] = useState('');
