@@ -60,7 +60,7 @@ const ProfileScreen = () => {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Profil</Text>
+      <Text>{username}</Text>
       <Text>Nom: {username}</Text>
       <Image source={{ uri: imageUri}} style={{ width: 200, height: 200, marginVertical: 10 }} />
       {audioUri && (

@@ -14,7 +14,7 @@ const SignUpScreen = () => {
     //console.log('Email:', email);
     // Vous pouvez ajouter ici la logique d'envoi des données au serveur, de stockage dans la base de données, etc.
     await setUserData('Username', username);
-    await setUserData('Pword', password);
+    await setUserData('Password', password);
   };
 
   const setUserData = async (key, value) => {

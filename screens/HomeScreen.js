@@ -66,9 +66,9 @@ const HomeScreen = ({ navigation }) => {
     // Ici, nous afficherons simplement le nom sur la console
     console.log('Nom:', username);
     // Naviguer vers un autre écran (par exemple, Profil)
-    var pword = await getValue('Pword');
+    var password = await getValue('Password');
     var user = await getValue('Username');
-    if(pword === password && username){
+    if(password === password && username){
       navigation.navigate('Profile');
     }
     else{
