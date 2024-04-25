@@ -2,11 +2,12 @@ import { Camera, CameraType } from 'expo-camera';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, {useRef } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //https://docs.expo.dev/versions/latest/sdk/camera/
 //faut implementer zoom et auto focus
 
-export default function App() {
+export default function App({ navigation }) {
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
@@ -17,7 +18,7 @@ export default function App() {
     return <View />;
   }
 
-  if (!permission.granted) {
+  if (!permission.granted) { 
     // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
@@ -25,6 +26,14 @@ export default function App() {
         <Button onPress={requestPermission} title="grant permission" />
       </View>
     );
+  }
+  const setUserData = async (key, value) => {
+    try{
+      await AsyncStorage.setItem(key, value);
+    }
+    catch(error){
+      console.error('Error storing data: ', error);
+    }
   }
 
   const handleZoomIn = () => {
@@ -50,7 +59,9 @@ export default function App() {
   const takePicture = async () => {
     if (cameraRef.current) {
       let photo = await cameraRef.current.takePictureAsync();
-      navigation.navigate('Profil', { imageUri: photo.uri });
+
+      await setUserData('ImageUri', photo.uri);
+      navigation.navigate('Profile');
     }
   };
 
@@ -71,18 +82,17 @@ export default function App() {
           style={{
             flex: 1,
             backgroundColor: 'transparent',
-            flexDirection: 'row',
             justifyContent: 'space-between',
             margin: 20,
           }}>
-          <Button title="Flash" onPress={toggleFlash} />
-          <Button title="Zoom +" onPress={handleZoomIn} />
-          <Button title="Zoom -" onPress={handleZoomOut} />
-          <Button title="Auto Focus" onPress={toggleAutoFocus} />
-          <Button title="Flip" onPress={toggleCameraType}></Button> 
-        </View>
-        <View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: 20 }}>
-          <Button title="Prendre une photo" onPress={takePicture} />
+            <View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: 20 }}>
+              <Button title="Prendre une photo" onPress={takePicture} />
+            </View>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Button title="Zoom -" onPress={handleZoomOut} />
+              <Button title="Flip" onPress={toggleCameraType}></Button> 
+              <Button title="Zoom +" onPress={handleZoomIn} />
+            </View>
         </View>
       </Camera>
     </View>

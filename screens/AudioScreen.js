@@ -46,7 +46,7 @@ const AudioScreen = () => {
 
   const playAudio = async () => {
     try {
-      const { sound, status } = await Audio.Sound.createAsync({ uri: audioUri });
+      const { sound, status } = await Audio.Sound.createAsync({ audioUri: audioUri });
       if (status === 'success') {
         await sound.playAsync();
       } else {
