@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 
+/*
  const getUsername = async () => {
     try {
       const value = await AsyncStorage.getItem('Username');
@@ -33,13 +34,13 @@ const Tab = createBottomTabNavigator();
       return null;
     }
   }
-
+*/
 export default function App() {
-
-  useEffect(async () => {
+/*
+ useEffect(async () => {
     await getUsername();
   }, []);
-  
+  */
   return (
     <PaperProvider>
       <NavigationContainer>

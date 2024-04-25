@@ -1,12 +1,13 @@
 // screens/ProfileScreen.js
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, Image, Pressable } from 'react-native';
+import { View, Text,StyleSheet, Button, Image, Pressable, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ProfileScreen = () => {
-  const [username, setUsername ] = useState(null);
+const ProfileScreen = ({navigation, route}) => {
+  const [username, setUsername ] = useState(route.params.username);
   const [imageUri, setImageUri] = useState(null);
   const [audioUri, setAudioUri] = useState(null);
+
 
   useEffect(() => {
     const onLoad = async () => {
@@ -30,7 +31,8 @@ const ProfileScreen = () => {
     try {
       const value = await AsyncStorage.getItem(key);
       if(value !== null){
-        console.log('Username: ', value)
+        console.log(value);
+       
         return value;
       }
       else{
@@ -58,24 +60,72 @@ const ProfileScreen = () => {
     console.log('Lecture de l\'audio:', audioUri);
   };
 
+  const playAudio = async () => {
+    try {
+      const { sound } = await Audio.Sound.createAsync({ uri: audioUri });
+      //setSound(sound);
+      await sound.playAsync();
+    } catch (error) {
+      console.error('Error playing audio:', error);
+    }
+  };
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>{username}</Text>
-      <Text>Nom: {username}</Text>
-      <Image source={{ uri: imageUri}} style={{ width: 200, height: 200, marginVertical: 10 }} />
-      {audioUri && (
+      <Image style={styles.profilePicture} source={{ uri: imageUri}}/>
+      <Text>{route.params.username}</Text>
+      <Text>Nom: {route.params.username}</Text>
         <View style={{ marginVertical: 10 }}>
           <Text>Audio enregistré: {audioUri}</Text>
-          <Pressable
-            style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5, marginTop: 10 }}
-            onPress={handlePlayAudio}
-          >
-            <Text style={{ color: 'white' }}>Lire l'audio</Text>
-          </Pressable>
+          <TouchableOpacity style={styles.button} onPress={handlePlayAudio} title="Jouer l'audio">
+          <Text style={{ color: 'white' }}>Lire l'audio</Text>
+          </TouchableOpacity>
         </View>
-      )}
+      
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f0f0f0',
+    paddingHorizontal: 20,
+  },
+  profilePictureContainer: {
+    marginBottom: 20,
+  },
+  profilePicture: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    borderWidth: 2,
+    borderColor: '#ccc',
+    marginBottom: 50
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  button: {
+    width: '100%',
+    height: 40,
+    backgroundColor: 'blue',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+});
 
 export default ProfileScreen;

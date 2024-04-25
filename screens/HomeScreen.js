@@ -2,62 +2,26 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
 import SignUpScreen from './SignUpScreen';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ route, navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorText, setErrorText] = useState('');
-  const [showSignUp, setShowSignUp] = useState(false);
+  //const [showSignUp, setShowSignUp] = useState(false);
+  const [welcomeText, setWelcomText] = useState('');
 
-  useEffect(() => {
-    const onLoad = async () => {
-      await handleShowSignUp();
-      var photoUri = await getValue("ImageUri");
-      if(photoUri === null){
-        await setUserData("ImageUri", './defaultprofileimg.jpg');
-      }
-    }
-    onLoad();
-  }, []);
+  if(route.params?.username){
+    setUsername(route.params.username); 
+    setPassword(route.params.password);
+    setWelcomText("Bienvenue " + route.params.username);
 
 
-  const clearData = async () => {
-    try {
-      // Clear all stored data
-      await AsyncStorage.clear();
-      console.log('All data cleared successfully!');
-    } catch (error) {
-      console.error('Error clearing data:', error);
-    }
-  };
-
-  const setUserData = async (key, value) => {
-    try{
-      await AsyncStorage.setItem(key, value);
-    }
-    catch(error){
-      console.error('Error storing data: ', error);
-    }
   }
 
-  const getValue = async (key) => {
-    try {
-      const value = await AsyncStorage.getItem(key);
-      if(value !== null){
-        console.log('Username: ', value)
-        return value;
-      }
-      else{
-        console.log('No username. Displaying sign up screen.')
-        return null;
-      }
-    }
-    catch{
-      console.error('Error retrieving username: ', error);
-      return null;
-    }
-  }
+
+
+
+
 
   const handleLogin = async () => {
     // Vérifiez les informations de connexion
@@ -66,37 +30,24 @@ const HomeScreen = ({ navigation }) => {
     // Ici, nous afficherons simplement le nom sur la console
     console.log('Nom:', username);
     // Naviguer vers un autre écran (par exemple, Profil)
-    var password = await getValue('Password');
-    var user = await getValue('Username');
-    if(password === password && username){
-      navigation.navigate('Profile');
+    navigation.navigate('Profile', {username});
+    /*
+    if(password === password && user === username){
+      navigation.navigate('Profile', {username});
+      
     }
     else{
       setErrorText("Mot de passe ou nom d'utilisateur invalide.");
     }
-  };
-
-  const handleShowSignUp = async () => {
-    
-    try{
-      const username = await getValue('Username');
-      if(username === null){
-        setShowSignUp(true);
-      }
-      else{
-        setShowSignUp(false);
-        setUsername(username);
-      }
-    }
-    catch{
-      console.error('Error getting username', error);
-    }
+    */
   };
   
 
   const Home = () => {
+
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text style={{color:'green'}}>{welcomeText}</Text>
       <Text>Accueil</Text>
       <Text style={{color:'red'}}>{errorText}</Text>
       <TextInput
@@ -118,16 +69,24 @@ const HomeScreen = ({ navigation }) => {
       >
         <Text style={{ color: 'white' }}>Se connecter</Text>
       </Pressable>
-      <Pressable style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5, marginTop: 10 }}onPress={clearData}>
-        <Text>Clear Data</Text>
+
+      <Pressable
+        style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5, marginTop: 10 }}
+        onPress={SignUpScreen}
+      >
+        <Text style={{ color: 'white' }}>S'inscrire</Text>
       </Pressable>
+
+
+ 
+
     </View>
     );
   };
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        {showSignUp ? ( <SignUpScreen/> ) : ( <Home/> )}
+        <Home/>
         <Text>Anton Sussmann Messmer, Tristan Berthiaume</Text>
     </View>
   );

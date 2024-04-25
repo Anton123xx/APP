@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUpScreen = () => {
   const [username, setUsername] = useState('');
@@ -13,18 +13,16 @@ const SignUpScreen = () => {
     console.log('Mot de passe:', password);
     //console.log('Email:', email);
     // Vous pouvez ajouter ici la logique d'envoi des données au serveur, de stockage dans la base de données, etc.
-    await setUserData('Username', username);
-    await setUserData('Password', password);
+
+    //await setUserData('Username', username);
+    //await setUserData('Password', password);
+
+     setUsername(username);
+     setPassword(password);
+     navigation.navigate('Profile', {username: username, password: password});
+
   };
 
-  const setUserData = async (key, value) => {
-    try{
-      await AsyncStorage.setItem(key, value);
-    }
-    catch(error){
-      console.error('Error storing data: ', error);
-    }
-  }
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
