@@ -46,14 +46,11 @@ const AudioScreen = () => {
 
   const playAudio = async () => {
     try {
-      const { sound, status } = await Audio.Sound.createAsync({ audioUri: audioUri });
-      if (status === 'success') {
-        await sound.playAsync();
-      } else {
-        console.error('Failed to load audio');
-      }
+      const { sound } = await Audio.Sound.createAsync({ uri: audioUri });
+      //setSound(sound);
+      await sound.playAsync();
     } catch (error) {
-      console.error('Failed to play audio', error);
+      console.error('Error playing audio:', error);
     }
   };
 
