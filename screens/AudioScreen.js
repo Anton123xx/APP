@@ -5,9 +5,9 @@ import * as FileSystem from 'expo-file-system';
 
 //https://docs.expo.dev/versions/latest/sdk/media-library/
 
-const AudioScreen = () => {
+const AudioScreen = ({audioUri, setAudioUri}) => {
   const [recording, setRecording] = useState(null);
-  const [audioUri, setAudioUri] = useState(null);
+  //const [audioUri, setAudioUri] = useState(null);
 
   const startRecording = async () => {
     try {
@@ -24,6 +24,7 @@ const AudioScreen = () => {
       await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
       await recording.startAsync();
       setRecording(recording);
+      //setAudioUri(recording);
     } catch (error) {
       console.error('Failed to start recording', error);
     }

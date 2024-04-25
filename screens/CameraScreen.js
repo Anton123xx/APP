@@ -8,7 +8,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 //https://docs.expo.dev/versions/latest/sdk/camera/
 //faut implementer zoom et auto focus
 
-export default function App({ navigation }) {
+export default function App({imageUri, setImageUri}) {
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
@@ -60,9 +60,9 @@ export default function App({ navigation }) {
   const takePicture = async () => {
     if (cameraRef.current) {
       let photo = await cameraRef.current.takePictureAsync();
-
-      await setUserData('ImageUri', photo.uri);
-      navigation.navigate('Profile');
+      setImageUri(photo.uri);
+      //await setUserData('ImageUri', photo.uri);
+      //navigation.navigate('Profile', { imageUri: photo.uri });
     }
   };
 

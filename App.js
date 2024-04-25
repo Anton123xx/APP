@@ -16,56 +16,43 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 
-/*
- const getUsername = async () => {
-    try {
-      const value = await AsyncStorage.getItem('Username');
-      if(value !== null){
-        console.log('Username: ', value)
-        return value;
-      }
-      else{
-        console.log('No username. Displaying sign up screen.')
-        return null;
-      }
-    }
-    catch{
-      console.error('Error retrieving username: ', error);
-      return null;
-    }
-  }
-*/
+
+
 export default function App() {
-/*
- useEffect(async () => {
-    await getUsername();
-  }, []);
-  */
+  const [audioUri, setAudioUri] = useState(null);
+  const [imageUri, setImageUri] = useState(null);
+  const [username, setUsername] = useState('swag');
+  const [password, setPassword] = useState('swag');
+  
+  
   return (
     <PaperProvider>
       <NavigationContainer>
         <Tab.Navigator>
-          <Tab.Screen name="Accueil" component={HomeScreen}
+          <Tab.Screen name="Accueil" component={() => <HomeScreen username={username} password={password}/>}
             options={{
               tabBarIcon: ({ focused }) => <Ionicons name="home" size={24}
                 color={focused ? "red" : "blue"} />
             }} />
-             <Tab.Screen name="Profile" component={ProfileScreen}
+          <Tab.Screen name="Profile" component={() => <ProfileScreen username={username} imageUri={imageUri} audioUri={audioUri} />}
             options={{
-              tabBarIcon: ({ focused }) =><MaterialIcons name="account-box" size={24}
+              tabBarIcon: ({ focused }) => <MaterialIcons name="account-box" size={24}
                 color={focused ? "red" : "blue"} />
             }} />
-          <Tab.Screen name="Caméra" component={CameraScreen} 
+          <Tab.Screen name="Caméra" component={() => <CameraScreen uri={imageUri} setImageUri={setImageUri} />}
             options={{
-              tabBarIcon: ({ focused }) =><AntDesign name="camera" size={24}
+              tabBarIcon: ({ focused }) => <AntDesign name="camera" size={24}
                 color={focused ? "red" : "blue"} />
-            }} 
+            }}
           />
-          <Tab.Screen name="Audio" component={AudioScreen} 
-           options={{
-            tabBarIcon: ({ focused }) =><FontAwesome5 name="microphone" size={24} 
-              color={focused ? "red" : "blue"} />
-          }} 
+          <Tab.Screen
+            name="Audio"
+            component={() => <AudioScreen uri={audioUri} setAudioUri={setAudioUri} />}
+            options={{
+              tabBarIcon: ({ focused }) => <FontAwesome5 name="microphone" size={24}
+                color={focused ? "red" : "blue"} />
+            }
+            }
           />
         </Tab.Navigator>
       </NavigationContainer>

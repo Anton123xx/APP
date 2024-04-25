@@ -3,63 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { View, Text,StyleSheet, Button, Image, Pressable, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ProfileScreen = ({navigation, route}) => {
-  const [username, setUsername ] = useState(route.params.username);
-  const [imageUri, setImageUri] = useState(null);
-  const [audioUri, setAudioUri] = useState(null);
+const ProfileScreen = ({username, imageUri, audioUri}) => {
+  //const [username, setUsername ] = useState('');
+  //const [imageUri, setImageUri] = useState('');
+  //const [audioUri, setAudioUri] = useState('');
 
-
-  useEffect(() => {
-    const onLoad = async () => {
-      var tempUri = await getValue("ImageUri");
-      var user = await getValue('Username');
-      setUsername(user);
-      
-      if(tempUri === null){
-        var imagePath = require('./defaultProfileImg.jpg');
-        var imgUri = Image.resolveAssetSource(imagePath).uri
-        setImageUri(imgUri);
-        await setUserData("ImageUri", imageUri);
-      }
-
-      setImageUri(tempUri);
-    }
-    onLoad();
-  }, []);
-
-  const getValue = async (key) => {
-    try {
-      const value = await AsyncStorage.getItem(key);
-      if(value !== null){
-        console.log(value);
-       
-        return value;
-      }
-      else{
-        console.log('No username. Displaying sign up screen.')
-        return null;
-      }
-    }
-    catch{
-      console.error('Error retrieving username: ', error);
-      return null;
-    }
-  }
-
-  const setUserData = async (key, value) => {
-    try{
-      await AsyncStorage.setItem(key, value);
-    }
-    catch(error){
-      console.error('Error storing data: ', error);
-    }
-  }
-
-  const handlePlayAudio = () => {
-    // Code pour jouer l'audio enregistré
-    console.log('Lecture de l\'audio:', audioUri);
-  };
-
+  
+ 
   const playAudio = async () => {
     try {
       const { sound } = await Audio.Sound.createAsync({ uri: audioUri });
@@ -73,11 +23,11 @@ const ProfileScreen = ({navigation, route}) => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Image style={styles.profilePicture} source={{ uri: imageUri}}/>
-      <Text>{route.params.username}</Text>
-      <Text>Nom: {route.params.username}</Text>
+      <Text>{username}</Text>
+      <Text>Nom: {username}</Text>
         <View style={{ marginVertical: 10 }}>
           <Text>Audio enregistré: {audioUri}</Text>
-          <TouchableOpacity style={styles.button} onPress={handlePlayAudio} title="Jouer l'audio">
+          <TouchableOpacity style={styles.button} onPress={playAudio} title="Jouer l'audio">
           <Text style={{ color: 'white' }}>Lire l'audio</Text>
           </TouchableOpacity>
         </View>
@@ -120,7 +70,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     borderRadius: 5,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   buttonText: {
     color: '#fff',

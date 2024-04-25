@@ -3,24 +3,18 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
 import SignUpScreen from './SignUpScreen';
 
-const HomeScreen = ({ route, navigation}) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const HomeScreen = ({username, password}) => {
+  //const [username, setUsername] = useState('');
+  //const [password, setPassword] = useState('');
   const [errorText, setErrorText] = useState('');
-  //const [showSignUp, setShowSignUp] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [welcomeText, setWelcomText] = useState('');
 
-  if(route.params?.username){
-    setUsername(route.params.username); 
-    setPassword(route.params.password);
-    setWelcomText("Bienvenue " + route.params.username);
-
-
+  if(loggedIn){
+    //setUsername(username); 
+    //setPassword(password);
+    setWelcomText("Bienvenue " + username);
   }
-
-
-
-
 
 
   const handleLogin = async () => {
@@ -30,16 +24,17 @@ const HomeScreen = ({ route, navigation}) => {
     // Ici, nous afficherons simplement le nom sur la console
     console.log('Nom:', username);
     // Naviguer vers un autre écran (par exemple, Profil)
-    navigation.navigate('Profile', {username});
-    /*
-    if(password === password && user === username){
-      navigation.navigate('Profile', {username});
-      
+    //navigation.navigate('Profile', {username});
+   
+    if(password === "swag" && "swag" === username){
+      //navigation.navigate('Profile', {username});
+      setWelcomText("Bienvenue " + username);
+      setLoggedIn(true);
     }
     else{
       setErrorText("Mot de passe ou nom d'utilisateur invalide.");
     }
-    */
+
   };
   
 
@@ -76,9 +71,6 @@ const HomeScreen = ({ route, navigation}) => {
       >
         <Text style={{ color: 'white' }}>S'inscrire</Text>
       </Pressable>
-
-
- 
 
     </View>
     );
