@@ -1,34 +1,44 @@
 // screens/HomeScreen.js
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Pressable } from 'react-native';
-import SignUpScreen from './SignUpScreen';
+import { View, Text, TextInput, Pressable, Button } from 'react-native';
+import {getData, setData, clearData} from '../funcs.js';
 
-const HomeScreen = ({username, password}) => {
-  //const [username, setUsername] = useState('');
-  //const [password, setPassword] = useState('');
+const HomeScreen = ({user, pword}) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [errorText, setErrorText] = useState('');
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [welcomeText, setWelcomText] = useState('');
+  const [isRegisted, setRegistered] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [accueilRenderCount, setAccueilRenderCount] = useState(0);
 
-  if(loggedIn){
-    //setUsername(username); 
-    //setPassword(password);
-    setWelcomText("Bienvenue " + username);
-  }
+  useEffect(() => {
+    // Function to retrieve value from AsyncStorage
+    const onLoad = async () => {
+      try {
+        var registed = await getData('Registered');
+        if (registed === 'true') {
+          setRegistered(true);
+          var logged = await getData('LoggedIn');
+          console.log(logged);
+          if(logged === 'true'){
+            console.log("HERE");
+            setLoggedIn(true);
+            setUsername(user); 
+            setPassword(pword);
+          }
+        }
+      } catch (error) {
+        console.error('Error retrieving value from AsyncStorage:', error);
+      }
+    };
+    onLoad();
+  }, []);
 
 
   const handleLogin = async () => {
-    // Vérifiez les informations de connexion
-    // Si les informations sont correctes, naviguez vers un autre écran
-    // Vous pouvez également stocker les informations de connexion dans un contexte ou un état global pour les utiliser dans d'autres écrans
-    // Ici, nous afficherons simplement le nom sur la console
-    console.log('Nom:', username);
-    // Naviguer vers un autre écran (par exemple, Profil)
-    //navigation.navigate('Profile', {username});
-   
-    if(password === "swag" && "swag" === username){
-      //navigation.navigate('Profile', {username});
-      setWelcomText("Bienvenue " + username);
+    
+    if(password === pword && user === username){
+      await setData('LoggedIn', "true");
       setLoggedIn(true);
     }
     else{
@@ -36,13 +46,49 @@ const HomeScreen = ({username, password}) => {
     }
 
   };
+
+  const logout = async () => {
+    await setData('LoggedIn', 'false');
+    setLoggedIn(false);
+  }
+
+  const deleteAccount = async () => {
+    await setData('LoggedIn', 'false');
+    await setData('Registered', 'false');
+    await setData('Username', '');
+    await setData('Password', '');
+    setLoggedIn(false);
+    setRegistered(false);
+  }
+
+  const HandleDisplay = () => {
+    console.log(isRegisted + " IS REGISTERED");
+    console.log(isLoggedIn + " IS LOGGED");
+    if(isRegisted === true){
+      if(isLoggedIn === true){
+        return (<View>
+          <Text>Bienvenu sur l'app de: </Text>
+          <Text>Anton Sussmann Messmer, Tristan Berthiaume</Text>
+          <Text/>
+          <Button title='Se déconnecter' onPress={logout}/>
+          <Button title='Effacer mon compte' onPress={deleteAccount}/>
+        </View>)
+      }
+      else{
+        return <Home/>
+      }
+    }
+    else{
+      return <SignUpScreen/>
+    }
+  }
   
 
   const Home = () => {
-
+  
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{color:'green'}}>{welcomeText}</Text>
+      
       <Text>Accueil</Text>
       <Text style={{color:'red'}}>{errorText}</Text>
       <TextInput
@@ -58,28 +104,59 @@ const HomeScreen = ({username, password}) => {
         secureTextEntry={true}
         value={password}
       />
-      <Pressable
-        style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5, marginTop: 10 }}
-        onPress={handleLogin}
-      >
-        <Text style={{ color: 'white' }}>Se connecter</Text>
-      </Pressable>
-
-      <Pressable
-        style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5, marginTop: 10 }}
-        onPress={SignUpScreen}
-      >
-        <Text style={{ color: 'white' }}>S'inscrire</Text>
-      </Pressable>
-
+      <Button
+          title="Se connecter"
+          onPress={handleLogin}
+        />
+        <Text/>
+        <Text>Anton Sussmann Messmer, Tristan Berthiaume</Text>
     </View>
     );
   };
 
+  const SignUpScreen = () => {
+  
+    const handleSignUp = async () => {
+      await setData('Username', username);
+      await setData('Password', password);
+      await setData('Registered', 'true');
+
+      setRegistered(true);
+  
+    };
+  
+  
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Inscription</Text>
+        <TextInput
+          style={{ height: 40, width: 300, borderColor: 'gray', borderWidth: 1, marginVertical: 10 }}
+          placeholder="Nom d'utilisateur"
+          onChangeText={text => setUsername(text)}
+          value={username}
+        />
+        <TextInput
+          style={{ height: 40, width: 300, borderColor: 'gray', borderWidth: 1, marginVertical: 10 }}
+          placeholder="Mot de passe"
+          onChangeText={text => setPassword(text)}
+          secureTextEntry={true}
+          value={password}
+        />
+        <Button
+          title="S'inscrire"
+          onPress={handleSignUp}
+        />
+        <Text/>
+        <Text>Anton Sussmann Messmer, Tristan Berthiaume</Text>
+      </View>
+    );
+  };
+
+  
+
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Home/>
-        <Text>Anton Sussmann Messmer, Tristan Berthiaume</Text>
+      <HandleDisplay/>
     </View>
   );
 }

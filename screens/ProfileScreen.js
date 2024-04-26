@@ -24,7 +24,6 @@ const ProfileScreen = ({username, imageUri, audioUri}) => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Image style={styles.profilePicture} source={{ uri: imageUri}}/>
-      <Text>{username}</Text>
       <Text>Nom: {username}</Text>
         <View style={{ marginVertical: 10 }}>
           {

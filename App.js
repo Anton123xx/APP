@@ -13,6 +13,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getData} from './funcs.js';
 
 
 const Tab = createBottomTabNavigator();
@@ -27,43 +28,41 @@ const HeaderLeftComponent = ({username}) => (
 export default function App() {
   const [audioUri, setAudioUri] = useState(null);
   const [imageUri, setImageUri] = useState('./screens/defaultProfileImg.jpg');
-  const [username, setUsername] = useState('swag');
-  const [password, setPassword] = useState('swag');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    // Function to retrieve value from AsyncStorage
+    const onLoad = async () => {
+      var user = await getData('Username');
+      var pword = await getData('Password');
+      await setUsername(user); 
+      await setPassword(pword);
+    };
+    onLoad();
+  }, []);
 
 
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Tab.Navigator screenOptions={{
-         headerLeft: () => (
-          <HeaderLeftComponent username={username}/>  // Render your custom component for the top-left title
-        ),
-        }}>
-          <Tab.Screen name="Accueil" component={() => <HomeScreen username={username} password={password} />}
-            options={{
-              tabBarIcon: ({ focused }) => <Ionicons name="home" size={24}
-                color={focused ? "red" : "blue"} />
-            }} />
-          <Tab.Screen name="Profile" component={() => <ProfileScreen username={username} imageUri={imageUri} audioUri={audioUri} />}
-            options={{
-              tabBarIcon: ({ focused }) => <MaterialIcons name="account-box" size={24}
-                color={focused ? "red" : "blue"} />
-            }} />
-          <Tab.Screen name="Caméra" component={() => <CameraScreen imageUri={imageUri} setImageUri={setImageUri} />}
-            options={{
-              tabBarIcon: ({ focused }) => <AntDesign name="camera" size={24}
-                color={focused ? "red" : "blue"} />
-            }}
-          />
-          <Tab.Screen
-            name="Audio"
-            component={() => <AudioScreen audioUri={audioUri} setAudioUri={setAudioUri} />}
-            options={{
-              tabBarIcon: ({ focused }) => <FontAwesome5 name="microphone" size={24}
-                color={focused ? "red" : "blue"} />
-            }
-            }
-          />
+        <Tab.Navigator screenOptions={{ headerLeft: () => ( <HeaderLeftComponent username={username}/> ), }}>
+          <Tab.Screen name="Accueil" options={{ tabBarIcon: ({ focused }) => <Ionicons name="home" size={24} color={focused ? "red" : "blue"} /> }} >
+            {() => <HomeScreen user={username} pword={password} />}
+          </Tab.Screen>
+
+          <Tab.Screen name="Profile" options={{ tabBarIcon: ({ focused }) => <MaterialIcons name="account-box" size={24} color={focused ? "red" : "blue"} /> }} >
+            {() => <ProfileScreen username={username} imageUri={imageUri} audioUri={audioUri} />}
+          </Tab.Screen>
+
+          <Tab.Screen name="Caméra" options={{ tabBarIcon: ({ focused }) => <AntDesign name="camera" size={24} color={focused ? "red" : "blue"} /> }}>
+            {() => <CameraScreen imageUri={imageUri} setImageUri={setImageUri} />}
+          </Tab.Screen>
+
+          <Tab.Screen name="Audio" options={{ tabBarIcon: ({ focused }) => <FontAwesome5 name="microphone" size={24} color={focused ? "red" : "blue"} /> }} >
+            {() => <AudioScreen audioUri={audioUri} setAudioUri={setAudioUri} />}
+          </Tab.Screen>
+
         </Tab.Navigator>
       </NavigationContainer>
     </PaperProvider>
