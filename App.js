@@ -1,6 +1,6 @@
 // App.js
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Pressable } from 'react-native';
+import { View, Text, TextInput, Pressab, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -27,17 +27,16 @@ const HeaderLeftComponent = ({username}) => (
 
 export default function App() {
   const [audioUri, setAudioUri] = useState(null);
-  const [imageUri, setImageUri] = useState('./screens/defaultProfileImg.jpg');
+  const [imageUri, setImageUri] = useState(Image.resolveAssetSource(require('./screens/defaultProfileImg.jpg')).uri);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    // Function to retrieve value from AsyncStorage
     const onLoad = async () => {
       var user = await getData('Username');
       var pword = await getData('Password');
-      await setUsername(user); 
-      await setPassword(pword);
+      setUsername(user); 
+      setPassword(pword);
     };
     onLoad();
   }, []);

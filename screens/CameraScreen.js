@@ -1,6 +1,6 @@
 import { Camera, CameraType } from 'expo-camera';
 import { useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -24,17 +24,11 @@ export default function App({imageUri, setImageUri}) {
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-        <TouchableOpacity onPress={requestPermission} title="grant permission" />
+        <Pressable onPress={requestPermission}>
+          <Text>Grant permission</Text>
+        </Pressable>
       </View>
     );
-  }
-  const setUserData = async (key, value) => {
-    try {
-      await AsyncStorage.setItem(key, value);
-    }
-    catch (error) {
-      console.error('Error storing data: ', error);
-    }
   }
 
   const handleZoomIn = () => {
