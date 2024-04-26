@@ -1,5 +1,6 @@
 // App.js
 import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, Pressable } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -16,6 +17,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 
+const HeaderLeftComponent = ({username}) => (
+  <View style={{ marginLeft: 10 }}>
+    <Text style={{ fontSize: 18 }}>{username}</Text> 
+  </View>
+);
 
 
 export default function App() {
@@ -23,13 +29,17 @@ export default function App() {
   const [imageUri, setImageUri] = useState('./screens/defaultProfileImg.jpg');
   const [username, setUsername] = useState('swag');
   const [password, setPassword] = useState('swag');
-  
+
 
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name="Accueil" component={() => <HomeScreen username={username} password={password}/>}
+        <Tab.Navigator screenOptions={{
+         headerLeft: () => (
+          <HeaderLeftComponent username={username}/>  // Render your custom component for the top-left title
+        ),
+        }}>
+          <Tab.Screen name="Accueil" component={() => <HomeScreen username={username} password={password} />}
             options={{
               tabBarIcon: ({ focused }) => <Ionicons name="home" size={24}
                 color={focused ? "red" : "blue"} />
