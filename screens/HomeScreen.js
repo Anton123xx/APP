@@ -4,16 +4,14 @@ import { View, Text, TextInput, Pressable, Button } from 'react-native';
 import { getData, setData, clearData } from '../funcs.js';
 
 const HomeScreen = ({ user, pword }) => {
-  //const [username, setUsername] = useState('');
-  //const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [usernameLogin, setUsernameLogin] = useState('');
+  const [passwordLogin, setPasswordLogin] = useState('');
   const [errorText, setErrorText] = useState('');
   const [isRegisted, setRegistered] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [accueilRenderCount, setAccueilRenderCount] = useState(0);
-
-  const username = useRef(null);
-  const password = useRef(null);
-
 
   useEffect(() => {
     // Function to retrieve value from AsyncStorage
@@ -27,8 +25,8 @@ const HomeScreen = ({ user, pword }) => {
           if (logged === 'true') {
             console.log("HERE");
             setLoggedIn(true);
-            //setUsername(user); 
-            //setPassword(pword);
+            setUsername(user); 
+            setPassword(pword);
 
 
           }
@@ -40,38 +38,18 @@ const HomeScreen = ({ user, pword }) => {
     onLoad();
   }, []);
 
-
-  const handleLogin = async () => {
-
-    if (password === pword && user === username) {
-      await setData('LoggedIn', "true");
-      setLoggedIn(true);
-    }
-    else {
-      setErrorText("Mot de passe ou nom d'utilisateur invalide.");
-    }
-
-  };
-
-
-
   const logout = async () => {
     await setData('LoggedIn', 'false');
     setLoggedIn(false);
   }
 
   const deleteAccount = async () => {
-    await setData('LoggedIn', 'false');
-    await setData('Registered', 'false');
-    await setData('Username', '');
-    await setData('Password', '');
+    await clearData();
     setLoggedIn(false);
     setRegistered(false);
   }
 
   const HandleDisplay = () => {
-    console.log(isRegisted + " IS REGISTERED");
-    console.log(isLoggedIn + " IS LOGGED");
     if (isRegisted === true) {
       if (isLoggedIn === true) {
         return (<View>
@@ -94,24 +72,18 @@ const HomeScreen = ({ user, pword }) => {
 
   const Home = () => {
 
-    const loginUpdate = useCallback(async (event) => {
-      event.preventDefault();
-      // Your logic/code
-      // For value do: 
-      // const email = emailRef.current.value;
+    const handleLogin = async () => {
 
-      await setData('LoggedIn', "true");
-      setLoggedIn(true);
-      // if (password.current.value === pword && user === username.current.value) {
-      //   await setData('LoggedIn', "true");
-      //   setLoggedIn(true);
-      // }
-      // else {
-      //   setErrorText("Mot de passe ou nom d'utilisateur invalide.");
-      // }
+      if (passwordLogin === password && usernameLogin === username) {
+        await setData('LoggedIn', "true");
+        setLoggedIn(true);
+      }
+      else {
+        setErrorText("Mot de passe ou nom d'utilisateur invalide.");
+      }
+  
+    };
 
-
-    }, [username, password]);
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
@@ -120,21 +92,20 @@ const HomeScreen = ({ user, pword }) => {
         <TextInput
           style={{ height: 40, width: 200, borderColor: 'gray', borderWidth: 1, marginVertical: 10 }}
           placeholder="Nom d'utilisateur"
-          //onChangeText={text => setUsername(text)}
-          ref={username}
-        //value={username}
+          value={usernameLogin}
+          onChangeText={text => setUsernameLogin(text)}
         />
         <TextInput
           style={{ height: 40, width: 200, borderColor: 'gray', borderWidth: 1, marginVertical: 10 }}
           placeholder="Mot de passe"
-          //onChangeText={text => setPassword(text)}
-          ref={password}
+          value={passwordLogin}
+          onChangeText={text => setPasswordLogin(text)}
           secureTextEntry={true}
-        //value={password}
+
         />
         <Button
           title="Se connecter"
-          onPress={loginUpdate}
+          onPress={handleLogin}
         />
         <Text />
         <Text>Anton Sussmann Messmer, Tristan Berthiaume</Text>
@@ -145,11 +116,18 @@ const HomeScreen = ({ user, pword }) => {
   const SignUpScreen = () => {
 
     const handleSignUp = async () => {
-      await setData('Username', username);
-      await setData('Password', password);
-      await setData('Registered', 'true');
+      console.log(username)
 
-      setRegistered(true);
+      try{
+        await setData('Username', username);
+        await setData('Password', password);
+        await setData('Registered', 'true');
+
+        setRegistered(true);
+      }
+      catch(error){
+        console.error('Error saving data to AsyncStorage:', error);
+      }
 
     };
 
@@ -158,17 +136,18 @@ const HomeScreen = ({ user, pword }) => {
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text>Inscription</Text>
         <TextInput
-          style={{ height: 40, width: 300, borderColor: 'gray', borderWidth: 1, marginVertical: 10 }}
+          style={{ height: 40, width: 200, borderColor: 'gray', borderWidth: 1, marginVertical: 10 }}
           placeholder="Nom d'utilisateur"
-          onChangeText={text => setUsername(text)}
           value={username}
+          onChangeText={(text) => setUsername(text)}
         />
         <TextInput
-          style={{ height: 40, width: 300, borderColor: 'gray', borderWidth: 1, marginVertical: 10 }}
+          style={{ height: 40, width: 200, borderColor: 'gray', borderWidth: 1, marginVertical: 10 }}
           placeholder="Mot de passe"
-          onChangeText={text => setPassword(text)}
-          secureTextEntry={true}
           value={password}
+          onChangeText={(text) => setPassword(text)}
+          secureTextEntry={true}
+
         />
         <Button
           title="S'inscrire"
