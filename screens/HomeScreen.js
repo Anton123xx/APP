@@ -4,15 +4,15 @@ import { View, Text, TextInput, Pressable, Button } from 'react-native';
 import { getData, setData, clearData } from '../funcs.js';
 
 const HomeScreen = ({ user, pword }) => {
-  //const [username, setUsername] = useState('');
-  //const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [errorText, setErrorText] = useState('');
   const [isRegisted, setRegistered] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [accueilRenderCount, setAccueilRenderCount] = useState(0);
 
-  const username = useRef(null);
-  const password = useRef(null);
+  const usernameRef = useRef(null);
+  const passwordRef = useRef(null);
 
 
   useEffect(() => {
@@ -27,8 +27,8 @@ const HomeScreen = ({ user, pword }) => {
           if (logged === 'true') {
             console.log("HERE");
             setLoggedIn(true);
-            //setUsername(user); 
-            //setPassword(pword);
+            setUsername(user); 
+            setPassword(pword);
 
 
           }
@@ -97,11 +97,11 @@ const HomeScreen = ({ user, pword }) => {
 
     const loginUpdate = useCallback(async (event) => {
       event.preventDefault();
-      // Your logic/code
-      // For value do: 
-      // const email = emailRef.current.value;
+
 
       await setData('LoggedIn', "true");
+      await setData("Username", "user");
+      //setUsername(usernameRef.current.value);
       setLoggedIn(true);
       // if (password.current.value === pword && user === username.current.value) {
       //   await setData('LoggedIn', "true");
@@ -122,14 +122,14 @@ const HomeScreen = ({ user, pword }) => {
           style={{ height: 40, width: 200, borderColor: 'gray', borderWidth: 1, marginVertical: 10 }}
           placeholder="Nom d'utilisateur"
           //onChangeText={text => setUsername(text)}
-          ref={username}
+          ref={usernameRef}
         //value={username}
         />
         <TextInput
           style={{ height: 40, width: 200, borderColor: 'gray', borderWidth: 1, marginVertical: 10 }}
           placeholder="Mot de passe"
           //onChangeText={text => setPassword(text)}
-          ref={password}
+          ref={passwordRef}
           secureTextEntry={true}
         //value={password}
         />
