@@ -72,7 +72,8 @@ const HomeScreen = ({ user, pword }) => {
   const HandleDisplay = () => {
     console.log(isRegisted + " IS REGISTERED");
     console.log(isLoggedIn + " IS LOGGED");
-    if (isRegisted === true) {
+    //signup marche pas
+    if (isRegisted === false) {
       if (isLoggedIn === true) {
         return (<View>
           <Text>Bienvenu sur l'app de: </Text>
